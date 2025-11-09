@@ -1,33 +1,107 @@
 .home {
-  background-color: #f5f5f5;
-  padding: 100px 0;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   text-align: center;
+  padding: 100px 20px;
+  position: relative;
+  overflow: hidden;
+}
 
-  .home-content {
-    max-width: 800px;
-    margin: 0 auto;
+.home::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+  animation: floatBackground 8s infinite linear;
+  z-index: 0;
+}
 
-    h1 {
-      font-size: 36px;
-      margin-bottom: 20px;
+@keyframes floatBackground {
+  0% { transform: rotate(0deg) scale(1); }
+  50% { transform: rotate(180deg) scale(1.1); }
+  100% { transform: rotate(360deg) scale(1); }
+}
 
-      @media (max-width: 768px) {
-        font-size: 28px;
-      }
-    }
+.home-content {
+  max-width: 800px;
+  margin: 0 auto;
+  z-index: 1;
+  position: relative;
+  animation: fadeIn 1.2s ease-in-out;
+}
 
-    p {
-      font-size: 18px;
-      color: #666;
-      margin-bottom: 40px;
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(40px); }
+  to { opacity: 1; transform: translateY(0); }
+}
 
-      @media (max-width: 768px) {
-        font-size: 16px;
-      }
-    }
+.home-content h1 {
+  font-size: 3rem;
+  margin-bottom: 20px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  line-height: 1.2;
+}
 
-    button {
-      padding: 12px 24px;
-    }
+.home-content p {
+  font-size: 1.2rem;
+  color: #e0e0e0;
+  margin-bottom: 40px;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.common-btn {
+  background-color: white;
+  color: #2575fc;
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 14px 32px;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0px 5px 15px rgba(255, 255, 255, 0.2);
+}
+
+.common-btn:hover {
+  background-color: #2575fc;
+  color: white;
+  transform: translateY(-3px);
+  box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.3);
+}
+
+/* Testimonials section style */
+.testimonials-section {
+  background-color: #f8f9ff;
+  padding: 80px 20px;
+  text-align: center;
+  transition: background-color 0.4s ease;
+}
+
+.testimonials-section:hover {
+  background-color: #eef1ff;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .home-content h1 {
+    font-size: 2.2rem;
+  }
+
+  .home-content p {
+    font-size: 1rem;
+  }
+
+  .common-btn {
+    padding: 12px 24px;
   }
 }

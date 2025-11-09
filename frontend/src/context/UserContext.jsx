@@ -6,18 +6,16 @@ import toast, { Toaster } from "react-hot-toast";
 const UserContext = createContext();
 
 export const UserContextProvider = ({ children }) => {
-  const [user, setUser] = useState([]);
+  const [user, setUser] = useState(null); // user is object, not array
   const [isAuth, setIsAuth] = useState(false);
   const [btnLoading, setBtnLoading] = useState(false);
   const [loading, setLoading] = useState(true);
 
+  // Login function
   async function loginUser(email, password, navigate, fetchMyCourse) {
     setBtnLoading(true);
     try {
-      const { data } = await axios.post(`${server}/api/user/login`, {
-        email,
-        password,
-      });
+      const { data } = await axios.post(`${server}/api/user/login`, { email, password });
 
       toast.success(data.message);
       localStorage.setItem("token", data.token);
@@ -25,22 +23,19 @@ export const UserContextProvider = ({ children }) => {
       setIsAuth(true);
       setBtnLoading(false);
       navigate("/");
-      fetchMyCourse();
+      if (fetchMyCourse) fetchMyCourse();
     } catch (error) {
       setBtnLoading(false);
       setIsAuth(false);
-      toast.error(error.response.data.message);
+      toast.error(error.response?.data?.message || error.message);
     }
   }
 
+  // Register function
   async function registerUser(name, email, password, navigate) {
     setBtnLoading(true);
     try {
-      const { data } = await axios.post(`${server}/api/user/register`, {
-        name,
-        email,
-        password,
-      });
+      const { data } = await axios.post(`${server}/api/user/register`, { name, email, password });
 
       toast.success(data.message);
       localStorage.setItem("activationToken", data.activationToken);
@@ -48,42 +43,47 @@ export const UserContextProvider = ({ children }) => {
       navigate("/verify");
     } catch (error) {
       setBtnLoading(false);
-      toast.error(error.response.data.message);
+      toast.error(error.response?.data?.message || error.message);
     }
   }
 
+  // OTP verification
   async function verifyOtp(otp, navigate) {
     setBtnLoading(true);
     const activationToken = localStorage.getItem("activationToken");
     try {
-      const { data } = await axios.post(`${server}/api/user/verify`, {
-        otp,
-        activationToken,
-      });
+      const { data } = await axios.post(`${server}/api/user/verify`, { otp, activationToken });
 
       toast.success(data.message);
       navigate("/login");
-      localStorage.clear();
+      localStorage.removeItem("activationToken"); // only remove activation token
       setBtnLoading(false);
     } catch (error) {
-      toast.error(error.response.data.message);
+      toast.error(error.response?.data?.message || error.message);
       setBtnLoading(false);
     }
   }
 
+  // Fetch logged-in user
   async function fetchUser() {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      setIsAuth(false);
+      setLoading(false);
+      return;
+    }
+
     try {
       const { data } = await axios.get(`${server}/api/user/me`, {
-        headers: {
-          token: localStorage.getItem("token"),
-        },
+        headers: { token },
       });
 
-      setIsAuth(true);
       setUser(data.user);
+      setIsAuth(true);
       setLoading(false);
     } catch (error) {
-      console.log(error);
+      console.error("fetchUser error:", error.response?.data || error.message);
+      setIsAuth(false);
       setLoading(false);
     }
   }
@@ -91,16 +91,17 @@ export const UserContextProvider = ({ children }) => {
   useEffect(() => {
     fetchUser();
   }, []);
+
   return (
     <UserContext.Provider
       value={{
         user,
         setUser,
-        setIsAuth,
         isAuth,
-        loginUser,
+        setIsAuth,
         btnLoading,
         loading,
+        loginUser,
         registerUser,
         verifyOtp,
         fetchUser,

@@ -1,50 +1,101 @@
+/* --- Sidebar Container --- */
 .sidebar {
-  width: 200px;
-  height: 100%;
+  width: 230px;
+  height: 100vh;
+  position: fixed;
+  top: 0;
   left: 0;
-  color: white;
-  border-right: 1px solid gray;
+  background: linear-gradient(180deg, #6a11cb, #2575fc);
+  color: #fff;
+  border-right: 1px solid rgba(255, 255, 255, 0.15);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding-top: 80px;
+  transition: width 0.3s ease;
+  overflow: hidden;
+  font-family: "Poppins", sans-serif;
+  box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15);
+  z-index: 10;
+}
 
-  @media (max-width: 768px) {
-    width: 30px;
-  }
-
-  ul {
-    list-style: none;
-    padding: 0;
-
-    li {
-      margin-bottom: 10px;
-      cursor: pointer;
-      padding: 12px;
-
-      @media (max-width: 768px) {
-        padding: 7px;
-      }
-
-      &:hover {
-        background-color: gray;
-      }
-
-      a {
-        display: flex;
-        text-decoration: none;
-        counter-reset: blueviolet;
-
-        span {
-          margin-left: 15px;
-
-          @media (max-width: 768px) {
-            display: none;
-          }
-        }
-      }
-    }
+/* --- Collapsed Sidebar (Mobile) --- */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 70px;
+    padding-top: 60px;
   }
 }
 
+/* --- Sidebar Links --- */
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar ul li {
+  margin: 8px 0;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.sidebar ul li a {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: #fff;
+  font-size: 16px;
+  padding: 12px 20px;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+}
+
+.sidebar ul li a:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateX(5px);
+}
+
+/* --- Active Link Highlight --- */
+.sidebar ul li.active a {
+  background: rgba(255, 255, 255, 0.25);
+  font-weight: 600;
+  box-shadow: inset 2px 0 0 #fff;
+}
+
+/* --- Icon + Text --- */
+.sidebar ul li a svg {
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.sidebar ul li a span {
+  margin-left: 15px;
+  white-space: nowrap;
+  transition: opacity 0.3s ease;
+}
+
+/* --- Hide text on mobile collapse --- */
+@media (max-width: 768px) {
+  .sidebar ul li a span {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+/* --- Dashboard Layout Wrapper --- */
 .dashboard-admin {
   display: flex;
-  min-height: 80vh;
-  margin-top: 20px;
+  min-height: 100vh;
+  margin-left: 230px;
+  background: #f7f8fc;
+  transition: margin-left 0.3s ease;
+}
+
+/* Adjust when sidebar collapses */
+@media (max-width: 768px) {
+  .dashboard-admin {
+    margin-left: 70px;
+  }
 }

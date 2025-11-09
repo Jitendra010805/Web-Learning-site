@@ -5,38 +5,46 @@ export const isAuth = async (req, res, next) => {
   try {
     const token = req.headers.token;
 
-    if (!token) {
-      return res.status(403).json({
-        message: "Please Login",
-      });
-    }
-
-    // Debug: check if JWT_SECRET is loaded
+    console.log("Token received:", token);
     console.log("JWT_SECRET:", process.env.JWT_SECRET);
 
-    const decodedData = jwt.verify(token, process.env.JWT_SECRET);
+    if (!token) {
+      return res.status(401).json({ message: "Token missing. Please login." });
+    }
 
-    req.user = await User.findById(decodedData._id);
+    let decodedData;
+    try {
+      decodedData = jwt.verify(token, process.env.JWT_SECRET);
+      console.log("Decoded JWT:", decodedData);
+    } catch (err) {
+      console.error("JWT verification failed:", err.message);
+      return res.status(403).json({ message: "Invalid or expired token" });
+    }
 
+    const user = await User.findById(decodedData._id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    req.user = user;
     next();
   } catch (error) {
-    res.status(403).json({
-      message: "Login First",
-    });
+    console.error("Auth middleware error:", error.message);
+    return res.status(500).json({ message: "Server error in authentication" });
   }
 };
 
 export const isAdmin = (req, res, next) => {
   try {
-    if (req.user.role !== "admin")
-      return res.status(403).json({
-        message: "You are not admin",
-      });
-
+    if (!req.user) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+    if (req.user.role !== "admin") {
+      return res.status(403).json({ message: "You are not admin" });
+    }
     next();
   } catch (error) {
-    res.status(500).json({
-      message: error.message,
-    });
+    console.error("Admin middleware error:", error.message);
+    return res.status(500).json({ message: "Server error" });
   }
 };
