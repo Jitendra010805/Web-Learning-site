@@ -15,74 +15,77 @@ const CourseDescription = ({ user }) => {
   const [loading, setLoading] = useState(false);
 
   const { fetchUser } = UserData();
-
   const { fetchCourse, course, fetchCourses, fetchMyCourse } = CourseData();
 
   useEffect(() => {
     fetchCourse(params.id);
-  }, []);
+  }, [params.id]);
 
   const checkoutHandler = async () => {
     const token = localStorage.getItem("token");
     setLoading(true);
 
-    const {
-      data: { order },
-    } = await axios.post(
-      `${server}/api/course/checkout/${params.id}`,
-      {},
-      {
-        headers: {
-          token,
-        },
+    try {
+      // Create Razorpay order
+      const {
+        data: { order },
+      } = await axios.post(
+        `${server}/api/course/checkout/${params.id}`,
+        {},
+        { headers: { token } }
+      );
+
+      if (!order || !order.id) {
+        throw new Error("Invalid order response from server");
       }
-    );
 
-    const options = {
-      key: "rzp_test_yOMeMyaj2wlvTt", // Enter the Key ID generated from the Dashboard
-      amount: order.id, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
-      currency: "INR",
-      name: "E learning", //your business name
-      description: "Learn with us",
-      order_id: order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+      const options = {
+        key:"rzp_test_RbxfknpLORCa1G",
+        amount: order.amount, // Razorpay expects amount in paise
+        currency: "INR",
+        name: "E learning",
+        description: "Learn with us",
+        order_id: order.id,
+        handler: async function (response) {
+          const { razorpay_order_id, razorpay_payment_id, razorpay_signature } =
+            response;
 
-      handler: async function (response) {
-        const { razorpay_order_id, razorpay_payment_id, razorpay_signature } =
-          response;
-
-        try {
-          const { data } = await axios.post(
-            `${server}/api/verification/${params.id}`,
-            {
-              razorpay_order_id,
-              razorpay_payment_id,
-              razorpay_signature,
-            },
-            {
-              headers: {
-                token,
+          try {
+            const { data } = await axios.post(
+              `${server}/api/verification/${params.id}`,
+              {
+                razorpay_order_id,
+                razorpay_payment_id,
+                razorpay_signature,
               },
-            }
-          );
+              { headers: { token } }
+            );
 
-          await fetchUser();
-          await fetchCourses();
-          await fetchMyCourse();
-          toast.success(data.message);
-          setLoading(false);
-          navigate(`/payment-success/${razorpay_payment_id}`);
-        } catch (error) {
-          toast.error(error.response.data.message);
-          setLoading(false);
-        }
-      },
-      theme: {
-        color: "#8a4baf",
-      },
-    };
-    const razorpay = new window.Razorpay(options);
+            await fetchUser();
+            await fetchCourses();
+            await fetchMyCourse();
+            toast.success(data.message);
+            navigate(`/payment-success/${razorpay_payment_id}`);
+          } catch (error) {
+            toast.error(
+              error.response?.data?.message || "Payment verification failed"
+            );
+          } finally {
+            setLoading(false);
+          }
+        },
+        theme: { color: "#8a4baf" },
+      };
 
-    razorpay.open();
+      const razorpay = new window.Razorpay(options);
+      razorpay.open();
+    } catch (error) {
+      console.log("Checkout error:", error);
+      toast.error(
+        error.response?.data?.message || "Something went wrong with checkout"
+      );
+      setLoading(false);
+    }
   };
 
   return (
@@ -107,8 +110,7 @@ const CourseDescription = ({ user }) => {
               </div>
 
               <p>{course.description}</p>
-
-              <p>Let's get started with course At ₹{course.price}</p>
+              <p>Let's get started with course at ₹{course.price}</p>
 
               {user && user.subscription.includes(course._id) ? (
                 <button
