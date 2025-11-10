@@ -10,7 +10,7 @@ export const CourseContextProvider = ({ children }) => {
 
   async function fetchCourses() {
     try {
-      const { data } = await API.get("/api/course/all");
+      const { data } = await API.get("/course/all");
       setCourses(data.courses);
     } catch (error) {
       console.log(error);
@@ -19,7 +19,7 @@ export const CourseContextProvider = ({ children }) => {
 
   async function fetchCourse(id) {
     try {
-      const { data } = await API.get(`/api/course/${id}`);
+      const { data } = await API.get(`/course/${id}`);
       setCourse(data.course);
     } catch (error) {
       console.log(error);
@@ -28,10 +28,7 @@ export const CourseContextProvider = ({ children }) => {
 
   async function fetchMyCourse() {
     try {
-      const token = localStorage.getItem("token");
-      const { data } = await API.get("/api/mycourse", {
-        headers: { token },
-      });
+      const { data } = await API.get("/mycourse"); // token handled automatically
       setMyCourse(data.courses);
     } catch (error) {
       console.log(error);

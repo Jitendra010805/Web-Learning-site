@@ -10,18 +10,20 @@ export const UserContextProvider = ({ children }) => {
   const [btnLoading, setBtnLoading] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  // Login function
+  // ----------------- LOGIN -----------------
   async function loginUser(email, password, navigate, fetchMyCourse) {
     setBtnLoading(true);
     try {
-      const { data } = await API.post("/api/user/login", { email, password });
+      const { data } = await API.post("/user/login", { email, password });
       toast.success(data.message);
+
       localStorage.setItem("token", data.token);
       setUser(data.user);
       setIsAuth(true);
       setBtnLoading(false);
-      navigate("/");
+
       if (fetchMyCourse) fetchMyCourse();
+      navigate("/");
     } catch (error) {
       setBtnLoading(false);
       setIsAuth(false);
@@ -29,12 +31,13 @@ export const UserContextProvider = ({ children }) => {
     }
   }
 
-  // Register function
+  // ----------------- REGISTER -----------------
   async function registerUser(name, email, password, navigate) {
     setBtnLoading(true);
     try {
-      const { data } = await API.post("/api/user/register", { name, email, password });
+      const { data } = await API.post("/user/register", { name, email, password });
       toast.success(data.message);
+
       localStorage.setItem("activationToken", data.activationToken);
       setBtnLoading(false);
       navigate("/verify");
@@ -44,23 +47,25 @@ export const UserContextProvider = ({ children }) => {
     }
   }
 
-  // OTP verification
+  // ----------------- OTP VERIFICATION -----------------
   async function verifyOtp(otp, navigate) {
     setBtnLoading(true);
     const activationToken = localStorage.getItem("activationToken");
+
     try {
-      const { data } = await API.post("/api/user/verify", { otp, activationToken });
+      const { data } = await API.post("/user/verify", { otp, activationToken });
       toast.success(data.message);
-      navigate("/login");
+
       localStorage.removeItem("activationToken");
       setBtnLoading(false);
+      navigate("/login");
     } catch (error) {
       toast.error(error.response?.data?.message || error.message);
       setBtnLoading(false);
     }
   }
 
-  // Fetch logged-in user
+  // ----------------- FETCH LOGGED-IN USER -----------------
   async function fetchUser() {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -70,9 +75,7 @@ export const UserContextProvider = ({ children }) => {
     }
 
     try {
-      const { data } = await API.get("/api/user/me", {
-        headers: { token },
-      });
+      const { data } = await API.get("/user/me"); // token handled automatically
       setUser(data.user);
       setIsAuth(true);
       setLoading(false);
