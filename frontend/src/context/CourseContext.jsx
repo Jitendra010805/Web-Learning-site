@@ -8,30 +8,33 @@ export const CourseContextProvider = ({ children }) => {
   const [course, setCourse] = useState([]);
   const [mycourse, setMyCourse] = useState([]);
 
+  // Fetch all courses
   async function fetchCourses() {
     try {
-      const { data } = await API.get("/course/all");
+      const { data } = await API.get("/api/course/all");
       setCourses(data.courses);
     } catch (error) {
-      console.log(error);
+      console.log("fetchCourses error:", error);
     }
   }
 
+  // Fetch single course
   async function fetchCourse(id) {
     try {
-      const { data } = await API.get(`/course/${id}`);
+      const { data } = await API.get(`/api/course/${id}`);
       setCourse(data.course);
     } catch (error) {
-      console.log(error);
+      console.log("fetchCourse error:", error);
     }
   }
 
+  // Fetch user’s enrolled courses
   async function fetchMyCourse() {
     try {
-      const { data } = await API.get("/mycourse"); // token handled automatically
+      const { data } = await API.get("/api/mycourse"); // token handled by interceptor
       setMyCourse(data.courses);
     } catch (error) {
-      console.log(error);
+      console.log("fetchMyCourse error:", error);
     }
   }
 

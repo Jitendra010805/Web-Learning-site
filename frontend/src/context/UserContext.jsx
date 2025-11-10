@@ -14,7 +14,7 @@ export const UserContextProvider = ({ children }) => {
   async function loginUser(email, password, navigate, fetchMyCourse) {
     setBtnLoading(true);
     try {
-      const { data } = await API.post("/user/login", { email, password });
+      const { data } = await API.post("/api/user/login", { email, password });
       toast.success(data.message);
 
       localStorage.setItem("token", data.token);
