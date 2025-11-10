@@ -24,6 +24,7 @@ const ForgotPassword = () => {
       setBtnLoading(false);
     }
   };
+
   return (
     <div className="auth-page">
       <div className="auth-form">

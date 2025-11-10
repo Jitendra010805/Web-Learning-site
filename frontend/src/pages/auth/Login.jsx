@@ -16,6 +16,7 @@ const Login = () => {
     e.preventDefault();
     await loginUser(email, password, navigate, fetchMyCourse);
   };
+
   return (
     <div className="auth-page">
       <div className="auth-form">

@@ -1,12 +1,11 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import axios from "axios";
-import { server } from "../main";
+import API from "../api";
 import toast, { Toaster } from "react-hot-toast";
 
 const UserContext = createContext();
 
 export const UserContextProvider = ({ children }) => {
-  const [user, setUser] = useState(null); // user is object, not array
+  const [user, setUser] = useState(null);
   const [isAuth, setIsAuth] = useState(false);
   const [btnLoading, setBtnLoading] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -15,8 +14,7 @@ export const UserContextProvider = ({ children }) => {
   async function loginUser(email, password, navigate, fetchMyCourse) {
     setBtnLoading(true);
     try {
-      const { data } = await axios.post(`${server}/api/user/login`, { email, password });
-
+      const { data } = await API.post("/api/user/login", { email, password });
       toast.success(data.message);
       localStorage.setItem("token", data.token);
       setUser(data.user);
@@ -35,8 +33,7 @@ export const UserContextProvider = ({ children }) => {
   async function registerUser(name, email, password, navigate) {
     setBtnLoading(true);
     try {
-      const { data } = await axios.post(`${server}/api/user/register`, { name, email, password });
-
+      const { data } = await API.post("/api/user/register", { name, email, password });
       toast.success(data.message);
       localStorage.setItem("activationToken", data.activationToken);
       setBtnLoading(false);
@@ -52,11 +49,10 @@ export const UserContextProvider = ({ children }) => {
     setBtnLoading(true);
     const activationToken = localStorage.getItem("activationToken");
     try {
-      const { data } = await axios.post(`${server}/api/user/verify`, { otp, activationToken });
-
+      const { data } = await API.post("/api/user/verify", { otp, activationToken });
       toast.success(data.message);
       navigate("/login");
-      localStorage.removeItem("activationToken"); // only remove activation token
+      localStorage.removeItem("activationToken");
       setBtnLoading(false);
     } catch (error) {
       toast.error(error.response?.data?.message || error.message);
@@ -74,10 +70,9 @@ export const UserContextProvider = ({ children }) => {
     }
 
     try {
-      const { data } = await axios.get(`${server}/api/user/me`, {
+      const { data } = await API.get("/api/user/me", {
         headers: { token },
       });
-
       setUser(data.user);
       setIsAuth(true);
       setLoading(false);

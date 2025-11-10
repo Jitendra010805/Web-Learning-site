@@ -1,6 +1,5 @@
-import axios from "axios";
 import { createContext, useContext, useEffect, useState } from "react";
-import { server } from "../main";
+import API from "../api";
 
 const CourseContext = createContext();
 
@@ -11,8 +10,7 @@ export const CourseContextProvider = ({ children }) => {
 
   async function fetchCourses() {
     try {
-      const { data } = await axios.get(`${server}/api/course/all`);
-
+      const { data } = await API.get("/api/course/all");
       setCourses(data.courses);
     } catch (error) {
       console.log(error);
@@ -21,7 +19,7 @@ export const CourseContextProvider = ({ children }) => {
 
   async function fetchCourse(id) {
     try {
-      const { data } = await axios.get(`${server}/api/course/${id}`);
+      const { data } = await API.get(`/api/course/${id}`);
       setCourse(data.course);
     } catch (error) {
       console.log(error);
@@ -30,12 +28,10 @@ export const CourseContextProvider = ({ children }) => {
 
   async function fetchMyCourse() {
     try {
-      const { data } = await axios.get(`${server}/api/mycourse`, {
-        headers: {
-          token: localStorage.getItem("token"),
-        },
+      const token = localStorage.getItem("token");
+      const { data } = await API.get("/api/mycourse", {
+        headers: { token },
       });
-
       setMyCourse(data.courses);
     } catch (error) {
       console.log(error);
@@ -46,6 +42,7 @@ export const CourseContextProvider = ({ children }) => {
     fetchCourses();
     fetchMyCourse();
   }, []);
+
   return (
     <CourseContext.Provider
       value={{

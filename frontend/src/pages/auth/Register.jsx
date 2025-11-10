@@ -14,6 +14,7 @@ const Register = () => {
     e.preventDefault();
     await registerUser(name, email, password, navigate);
   };
+
   return (
     <div className="auth-page">
       <div className="auth-form">
