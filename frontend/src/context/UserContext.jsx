@@ -35,7 +35,8 @@ export const UserContextProvider = ({ children }) => {
   async function registerUser(name, email, password, navigate) {
     setBtnLoading(true);
     try {
-      const { data } = await API.post("/user/register", { name, email, password });
+      const { data } = await API.post("/api/user/register", { name, email, password });
+
       toast.success(data.message);
 
       localStorage.setItem("activationToken", data.activationToken);
@@ -53,7 +54,8 @@ export const UserContextProvider = ({ children }) => {
     const activationToken = localStorage.getItem("activationToken");
 
     try {
-      const { data } = await API.post("/user/verify", { otp, activationToken });
+     const { data } = await API.post("/api/user/verify", { otp, activationToken });
+
       toast.success(data.message);
 
       localStorage.removeItem("activationToken");
@@ -75,7 +77,8 @@ export const UserContextProvider = ({ children }) => {
     }
 
     try {
-      const { data } = await API.get("/user/me"); // token handled automatically
+     const { data } = await API.get("/api/user/me");
+
       setUser(data.user);
       setIsAuth(true);
       setLoading(false);
