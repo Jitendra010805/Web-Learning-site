@@ -1,0 +1,21 @@
+.courses {
+  padding: 80px 10%;
+  min-height: 80vh;
+  text-align: center;
+}
+
+.courses h2 {
+  font-size: 3rem;
+  color: var(--text-color);
+  margin-bottom: 50px;
+  font-weight: 900;
+  letter-spacing: -0.03em;
+}
+
+
+.course-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+  justify-items: center;
+}

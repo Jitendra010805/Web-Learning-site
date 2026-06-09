@@ -1,0 +1,144 @@
+.home-hero {
+  background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
+              linear-gradient(135deg, var(--accent-color), var(--accent-dark)),
+              url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1742&q=80');
+  background-blend-mode: overlay, normal, multiply;
+  background-size: cover;
+  background-position: center;
+  height: 90vh; /* Increased from 80vh for more hero space */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: white;
+  padding: 85px 20px 0 20px; /* Account for fixed header */
+}
+
+.home-hero h1 {
+  font-size: 4rem;
+  font-weight: 900;
+  margin-bottom: 25px;
+  max-width: 900px;
+  line-height: 1.1;
+  text-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+
+.home-hero p {
+  font-size: 1.25rem;
+  margin-bottom: 45px;
+  max-width: 700px;
+  opacity: 0.95;
+  font-weight: 500;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+
+/* Features Section - Overlapping Hero */
+.features {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  margin: -100px 10% 50px 10%;
+  z-index: 10;
+  position: relative;
+}
+
+.feature-card {
+  background: var(--card-bg);
+  backdrop-filter: blur(10px);
+  padding: 45px 35px;
+  border-radius: 20px;
+  box-shadow: var(--shadow-lg);
+  text-align: center;
+  flex: 1;
+  max-width: 380px;
+  border: 1px solid var(--border-color);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.feature-card:hover {
+  transform: translateY(-15px);
+  border-color: var(--accent-color);
+}
+
+.feature-card .icon {
+  font-size: 3.5rem;
+  color: var(--accent-color);
+  margin-bottom: 25px;
+  filter: drop-shadow(0 0 10px rgba(var(--accent-color), 0.2));
+}
+
+.feature-card h3 {
+  font-size: 1.6rem;
+  margin-bottom: 15px;
+  color: var(--text-color);
+  font-weight: 800;
+}
+
+.feature-card p {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  line-height: 1.7;
+}
+
+/* CTA Section synced with Accent */
+.home-cta {
+  background: linear-gradient(135deg, var(--accent-color), var(--accent-dark));
+  color: white;
+  text-align: center;
+  padding: 120px 10%;
+  margin-top: 80px;
+  border-radius: 40px;
+  margin-left: 5%;
+  margin-right: 5%;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+}
+
+.home-cta h2 {
+  font-size: 3rem;
+  margin-bottom: 25px;
+  font-weight: 900;
+}
+
+.home-cta p {
+  font-size: 1.15rem;
+  margin-bottom: 45px;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+  opacity: 0.9;
+}
+
+/* Popular Courses Container */
+.home-courses-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 40px;
+  padding-bottom: 80px;
+}
+
+@media (max-width: 768px) {
+  .home-hero {
+    height: 100vh;
+  }
+  .home-hero h1 {
+    font-size: 2.8rem;
+  }
+  .features {
+    flex-direction: column;
+    align-items: center;
+    margin-top: -60px;
+    padding: 0 5%;
+  }
+  .feature-card {
+    max-width: 100%;
+  }
+  .home-cta {
+    margin-top: 50px;
+    border-radius: 20px;
+    padding: 80px 5%;
+  }
+  .home-cta h2 {
+    font-size: 2.2rem;
+  }
+}

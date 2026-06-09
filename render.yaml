@@ -1,0 +1,29 @@
+services:
+  - type: web
+    name: e-learning-backend
+    env: node
+    plan: free
+    rootDir: server
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: PORT
+        value: 8080
+      - key: DB
+        sync: false
+      - key: Activation_Secret
+        sync: false
+      - key: password
+        sync: false
+      - key: Gmail
+        sync: false
+      - key: JWT_Sec
+        sync: false
+      - key: RAZORPAY_KEY
+        sync: false
+      - key: RAZORPAY_SECRET
+        sync: false
+      - key: Forgot_Secret
+        sync: false
+      - key: FRONTEND_URL
+        sync: false

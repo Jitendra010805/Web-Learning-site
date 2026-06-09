@@ -1,0 +1,25 @@
+# Dependency directories
+node_modules/
+fronted/node_modules/
+server/node_modules/
+
+# Production builds
+fronted/dist/
+
+# Environment variables
+.env
+server/.env
+fronted/.env
+
+# Local logs
+*.log
+npm-debug.log*
+
+# Uploads and temporary files
+server/uploads/*
+!server/uploads/.gitkeep
+
+# IDEs and OS
+.vscode/
+.idea/
+.DS_Store

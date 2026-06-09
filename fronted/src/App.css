@@ -1,0 +1,237 @@
+@import "tailwindcss";
+
+:root {
+  /* Dynamic Accent Color System */
+  --accent-color: #0062ff; /* Color Picker Theme */
+  --accent-light: color-mix(in srgb, var(--accent-color), white 25%);
+  --accent-dark: color-mix(in srgb, var(--accent-color), black 25%);
+  
+  /* Modern High-Contrast Palette */
+  --white: #ffffff;
+  --font-main: 'Outfit', 'Inter', system-ui, -apple-system, sans-serif;
+  --transition-speed: 0.3s;
+  --border-radius: 30px;
+  --shadow-sm: 0 4px 6px -1px rgba(0,0,0,0.1);
+  --shadow-md: 0 10px 15px -3px rgba(0,0,0,0.15);
+  --shadow-lg: 0 20px 25px -5px rgba(0,0,0,0.2);
+}
+
+[data-theme='light'] {
+  --bg-color: #ffffff;
+  --card-bg: rgba(255, 255, 255, 0.95);
+  --glass-bg: rgba(255, 255, 255, 0.85);
+  --glass-border: rgba(0, 0, 0, 0.05);
+  --text-color: #000000;
+  --text-muted: #4b5563;
+  --bg-animation-1: #f0f9ff;
+  --bg-animation-2: #e0f2fe;
+  --bg-animation-3: #ffffff;
+  --border-color: #e5e7eb;
+}
+
+[data-theme='dark'] {
+  --bg-color: #000000;
+  --card-bg: rgba(10, 10, 12, 0.95);
+  --glass-bg: rgba(10, 10, 12, 0.8);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --text-color: #ffffff;
+  --text-muted: #9ca3af;
+  --bg-animation-1: #020617;
+  --bg-animation-2: #000000;
+  --bg-animation-3: #0f172a;
+  --border-color: #1e293b;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: var(--font-main);
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: background-color 0.5s ease, color 0.5s ease;
+  line-height: 1.6;
+  overflow-x: hidden;
+  /* Premium Dynamic Gradient Background */
+  background: linear-gradient(-45deg, var(--bg-animation-1), var(--accent-dark), var(--bg-animation-2), var(--bg-animation-3));
+  background-size: 400% 400%;
+  animation: dynamicBG 15s ease infinite;
+}
+
+@keyframes dynamicBG {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* Global Content Padding to Fix Header Overlap (Home and Guest Pages) */
+.main-content {
+  padding-top: 85px; 
+  min-height: 80vh;
+}
+
+.common-btn {
+  background-color: var(--accent-color);
+  color: white;
+  padding: 12px 30px;
+  border: none;
+  border-radius: var(--border-radius);
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all var(--transition-speed) cubic-bezier(0.4, 0, 0.2, 1);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  text-decoration: none;
+  box-shadow: 0 4px 15px color-mix(in srgb, var(--accent-color), transparent 60%);
+}
+
+.common-btn:hover {
+  background-color: var(--accent-dark);
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 8px 20px color-mix(in srgb, var(--accent-color), transparent 40%);
+}
+
+.white-btn {
+  background-color: var(--white);
+  color: var(--accent-color);
+  padding: 12px 30px;
+  border: none;
+  border-radius: var(--border-radius);
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all var(--transition-speed) ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+
+.white-btn:hover {
+  background-color: #f8f9fa;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+/* Glassmorphism Section */
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-md);
+  border-radius: 24px;
+}
+
+/* Section utility */
+section {
+  padding: 100px 10%;
+}
+
+.section-title {
+  text-align: center;
+  font-size: 3rem;
+  margin-bottom: 60px;
+  color: var(--text-color);
+  font-weight: 900;
+  letter-spacing: -0.03em;
+}
+
+/* Base Card utility */
+.card {
+  background: var(--card-bg);
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: var(--shadow-md);
+  transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+  border: 1px solid var(--border-color);
+  color: var(--text-color);
+}
+
+.card:hover {
+  transform: translateY(-10px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--accent-color);
+}
+
+/* Entrance Animations */
+.fade-up {
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadeUp 0.8s forwards ease-out;
+}
+
+@keyframes fadeUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.8s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.98); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* Floating Shapes Sync with Accent Color */
+.bg-shapes {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1!important;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.shape {
+  position: absolute;
+  filter: blur(120px);
+  opacity: 0.25; 
+  border-radius: 50%;
+  transition: background-color 1s ease;
+}
+
+.shape-1 {
+  width: 600px;
+  height: 600px;
+  background: var(--accent-color);
+  top: -150px;
+  right: -100px;
+  animation: float 25s infinite alternate;
+}
+
+.shape-2 {
+  width: 500px;
+  height: 500px;
+  background: var(--accent-light);
+  bottom: -100px;
+  left: -50px;
+  animation: float 30s infinite alternate-reverse;
+}
+
+.shape-3 {
+  width: 400px;
+  height: 400px;
+  background: var(--accent-color);
+  top: 35%;
+  left: 15%;
+  animation: float 22s infinite alternate;
+}
+
+@keyframes float {
+  0% { transform: translate(0, 0) rotate(0deg) scale(1); }
+  100% { transform: translate(120px, 60px) rotate(45deg) scale(1.1); }
+}
