@@ -55,3 +55,4 @@ if (process.env.NODE_ENV !== "production" || !process.env.VERCEL) {
 export default app;
 
 // Trigger Vercel rebuild after updating env vars
+// Fresh deploy with Razorpay and JWT variables configured
