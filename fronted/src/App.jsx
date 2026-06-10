@@ -13,7 +13,7 @@ import { UserData } from "./context/UserContext";
 import Loading from "./components/loading/Loading";
 import Courses from "./pages/courses/Courses";
 import CourseDescription from "./pages/coursedescription/CourseDescription";
-import PaymentSuccess from "./pages/paymentsuccess/PaymentSuccess";
+import PaymentSuccess from "./pages/paymentsuccess/Paymentsuccess";
 import Dashbord from "./pages/dashboard/Dashboard";
 import CourseStudy from "./pages/coursestudy/CourseStudy";
 import Lecture from "./pages/lecture/Lecture";
