@@ -2,6 +2,8 @@ import express from "express";
 import dotenv from "dotenv";
 import { connectDb } from "./database/db.js";
 import cors from "cors";
+import path from "path";
+import os from "os";
 
 dotenv.config();
 
@@ -24,7 +26,8 @@ app.use(
 );
 
 app.use(express.json());
-app.use("/uploads", express.static("uploads"));
+const uploadDir = process.env.VERCEL ? path.join(os.tmpdir(), "uploads") : "uploads";
+app.use("/uploads", express.static(uploadDir));
 
 const port = process.env.PORT || 8080;
 
