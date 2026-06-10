@@ -10,7 +10,10 @@ const app = express();
 // ✅ Proper CORS setup
 const allowedOrigins = [
   process.env.FRONTEND_URL,
+  "https://fronted-seven-kappa.vercel.app",
+  "https://fronted-jitendra-singh-rathores-projects.vercel.app",
   "http://localhost:5173",
+  "http://localhost:5174",
 ].filter(Boolean);
 
 app.use(

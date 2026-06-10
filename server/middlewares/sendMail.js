@@ -7,8 +7,8 @@ const sendMail = async (email, subject, data) => {
       port: 465,
       secure: true,
       auth: {
-        user: process.env.GMAIL,
-        pass: process.env.PASSWORD,
+        user: process.env.GMAIL || process.env.Gmail,
+        pass: process.env.PASSWORD || process.env.password,
       },
     });
 
@@ -67,7 +67,7 @@ const sendMail = async (email, subject, data) => {
     }
 
     await transport.sendMail({
-      from: process.env.GMAIL,
+      from: process.env.GMAIL || process.env.Gmail,
       to: email,
       subject,
       html,
