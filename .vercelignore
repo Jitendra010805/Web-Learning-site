@@ -1,0 +1,14 @@
+node_modules
+/node_modules
+server/node_modules
+/server/node_modules
+fronted
+/fronted
+.git
+/.git
+.vercel
+/.vercel
+updateAdminCss.js
+updateCss.js
+updateSidebarCss.js
+*.log

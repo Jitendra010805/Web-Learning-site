@@ -42,8 +42,14 @@ app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
+// ✅ Start database
+connectDb();
+
 // ✅ Start server
-app.listen(port, () => {
-  console.log(`✅ Server is running on http://localhost:${port}`);
-  connectDb();
-});
+if (process.env.NODE_ENV !== "production" || !process.env.VERCEL) {
+  app.listen(port, () => {
+    console.log(`✅ Server is running on http://localhost:${port}`);
+  });
+}
+
+export default app;
