@@ -24,13 +24,23 @@ export const getSingleCourse=TryCatch(async(req,res)=>{
 
 export const fetchLectures=TryCatch(async(req,res)=>{
     const lectures=await Lecture.find({course:req.params.id});
-    const user=await User.findById(req.user._id)
+    if (!req.user) {
+        return res.status(401).json({
+            message: "Please login again",
+        });
+    }
+    const user=await User.findById(req.user._id);
+    if (!user) {
+        return res.status(404).json({
+            message: "User not found",
+        });
+    }
     if(user.role==="admin"){
         return res.json({
             lectures,
         })
     }
-    if(!user.subscription.includes(req.params.id)){
+    if(!user.subscription || !user.subscription.includes(req.params.id)){
         return res.status(400).json({
             message:"You have not subscribed to this course",
         })
@@ -40,14 +50,29 @@ export const fetchLectures=TryCatch(async(req,res)=>{
 });
 
 export const fetchLecture=TryCatch(async(req,res)=>{
-   const lecture=await Lecture.findById(req.params.id);
-    const user=await User.findById(req.user._id)
+    const lecture=await Lecture.findById(req.params.id);
+    if (!lecture) {
+        return res.status(404).json({
+            message: "Lecture not found",
+        });
+    }
+    if (!req.user) {
+        return res.status(401).json({
+            message: "Please login again",
+        });
+    }
+    const user=await User.findById(req.user._id);
+    if (!user) {
+        return res.status(404).json({
+            message: "User not found",
+        });
+    }
     if(user.role==="admin"){
         return res.json({
             lecture,
         })
     }
-    if(!user.subscription.includes(lecture.course.toString())){
+    if(!user.subscription || !user.subscription.includes(lecture.course.toString())){
         return res.status(400).json({
             message:"You have not subscribed to this course",
         })
@@ -57,16 +82,36 @@ export const fetchLecture=TryCatch(async(req,res)=>{
 });
 
 export const getMyCourses=TryCatch(async(req,res)=>{
-    const courses=await Courses.find({_id: req.user.subscription});
+    if (!req.user) {
+        return res.status(401).json({
+            message: "Please login again",
+        });
+    }
+    const courses=await Courses.find({_id: req.user.subscription || []});
     res.json({
         courses,
     });
 });
 
 export const checkout=TryCatch(async(req,res)=>{
+    if (!req.user) {
+        return res.status(401).json({
+            message: "Please login again",
+        });
+    }
     const user=await User.findById(req.user._id);
-    const course=await Courses.findById(req.params.id)
-    if(user.subscription.includes(course.id)){
+    if (!user) {
+        return res.status(404).json({
+            message: "User not found",
+        });
+    }
+    const course=await Courses.findById(req.params.id);
+    if (!course) {
+        return res.status(404).json({
+            message: "Course not found",
+        });
+    }
+    if(user.subscription && user.subscription.includes(course.id)){
         return res.status(400).json({
             message:"You have already subscribed to this course",
         });
@@ -97,8 +142,26 @@ export const paymentVerification=TryCatch(async(req,res)=>{
             razorpay_payment_id,
             razorpay_signature,
         });
+        if (!req.user) {
+            return res.status(401).json({
+                message: "Please login again",
+            });
+        }
         const user=await User.findById(req.user._id);
+        if (!user) {
+            return res.status(404).json({
+                message: "User not found",
+            });
+        }
         const course=await Courses.findById(req.params.id);
+        if (!course) {
+            return res.status(404).json({
+                message: "Course not found",
+            });
+        }
+        if (!user.subscription) {
+            user.subscription = [];
+        }
         user.subscription.push(course._id);
         await user.save();
 
